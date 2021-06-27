@@ -2,10 +2,30 @@
 
   
 
-  <div id="app">
+  <div class="" id="app">
+    <div class="flex">
     <Timer
     :time-left="timeLeft"
     />
+    <Timer
+    :time-left="timeLeft"
+    />
+    <Timer
+    :time-left="timeLeft"
+    />
+    </div>
+    <div class="space"></div>
+    <div class="flex">
+    <Timer
+    :time-left="timeLeft"
+    />
+    <Timer
+    :time-left="timeLeft"
+    />
+    <Timer
+    :time-left="timeLeft"
+    />
+    </div>
   </div>
 </template>
 
@@ -28,5 +48,14 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+}
+
+.space {
+  height: 300px;
 }
 </style>
