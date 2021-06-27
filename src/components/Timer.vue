@@ -24,17 +24,35 @@
     
     <span class=""> Attempts:{{ numberOfAttempts }} </span>
     <div></div>
-    <button class=""
-      @click="startTimer"
-    >
-    Start Timer
-    </button>
-    <button
-      @click="resetTime"
-    >
-    RESET
-    </button>
-    
+    <div  >
+      <div>
+      <button class="button"
+        @click="startTimer"
+      >
+      Start Timer
+      </button>
+
+      <button class="button"
+        @click="pauseTimer"
+      >
+      Pause Timer
+      </button>
+      </div>
+
+      <div>
+      <button class="button"
+        @click="resetTime"
+      >
+      RESET
+      </button>
+
+      <button class="button"
+        @click="endTimer"
+      >
+      End Timer
+      </button>
+      </div>
+    </div>   
   </div>
 </template>
 
@@ -42,6 +60,8 @@
 const FULL_DASH_ARRAY = 283;
 const WARNING_THRESHOLD = 60;
 const ALERT_THRESHOLD = 15;
+
+const audioFile = new Audio(require('../assets/Creepy-clock-chiming.mp3'));
 
 
 const COLOR_CODES = {
@@ -66,6 +86,7 @@ export default {
   data() {
     return {
       timePassed: 0,
+      halfHourTimerInterval: null,
       timerInterval: null,
       halfHourTimer: 0,
       numberOfAttempts: 0,
@@ -79,9 +100,9 @@ export default {
     },
 
     formattedTimeLeft() {
-      const timeLeft = this.timeLeft;
-      const minutes = Math.floor(timeLeft / 60);
-      let seconds = timeLeft % 60;
+      let timeLeftStill = this.timeLeft;
+      const minutes = Math.floor(timeLeftStill / 60);
+      let seconds = timeLeftStill % 60;
 
       if (seconds < 10) {
         seconds = `0${seconds}`;
@@ -90,9 +111,9 @@ export default {
       return `${minutes}:${seconds}`;
     },
     formattedTimePassed() {
-      const halfHourTimer = this.halfHourClock;
-      let minutes = Math.floor(halfHourTimer / 60);
-      let seconds = halfHourTimer % 60;
+      const halfHour = this.halfHourClock;
+      let minutes = Math.floor(halfHour / 60);
+      let seconds = halfHour % 60;
 
       if (seconds < 10) {
         seconds = `0${seconds}`;
@@ -101,12 +122,12 @@ export default {
       return `${minutes}:${seconds}`;
     },
 
-    timeLeft() {
-      return TIME_LIMIT - this.timePassed;
+    timeLeft() {   
+      return  TIME_LIMIT - this.timePassed;
     },
 
     halfHourClock() {
-      return HALF_HOUR - this.halfHourTimer + 9;
+      return HALF_HOUR - this.halfHourTimer;
     },
 
     timeFraction() {
@@ -138,17 +159,32 @@ export default {
   methods: {
     onTimesUp() {
       clearInterval(this.timerInterval);
-      clearInterval(this.halfHourClock);
+      audioFile.play();
     },
 
     startTimer() {
       this.timerInterval = setInterval(() => (this.timePassed += 1), 1000);
-      this.halfHourTimer = setInterval(() => (this.halfHourTimer += 1), 1000);
+      this.halfHourTimerInterval = setInterval(() => (this.halfHourTimer += 1), 1000);
     },
 
     resetTime() {
       this.numberOfAttempts +=1;
       this.timePassed = 0;
+    },
+
+    endTimer() {
+      clearInterval(this.timerInterval);
+      clearInterval(this.halfHourTimerInterval);
+      this.timePassed = 0;
+      this.halfHourTimer = 0;
+      this.numberOfAttempts = 0;
+      audioFile.pause();
+      audioFile.currentTime = 0;
+    },
+
+    pauseTimer() {
+      clearInterval(this.timerInterval);
+      clearInterval(this.halfHourTimerInterval);
     }
   }
 };
@@ -161,6 +197,7 @@ export default {
   position: relative;
   width: 300px;
   height: 150px;
+  padding-left: 20px;
 /* Removes SVG styling that would hide the time label */
   &__circle {
     fill: none;
@@ -184,6 +221,10 @@ export default {
     justify-content: center;
 
     font-size: 48px;
+  }
+  &__flex {
+    
+    justify-content: center;
   }
 
   &__path-remaining {
@@ -211,6 +252,10 @@ export default {
   &__svg {
     transform: scaleX(-1);
   }
+}
+.button {
+  width: 50%;
+  height: 25px;
 }
 p {
   font-weight: bold;
