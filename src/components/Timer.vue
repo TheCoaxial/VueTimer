@@ -77,7 +77,7 @@ const COLOR_CODES = {
     threshold: ALERT_THRESHOLD
   }
 };
-
+ 
 const TIME_LIMIT = 300;
 const HALF_HOUR = 1800;
 
