@@ -1,5 +1,5 @@
 <template>
-    <div class="base-timer">
+  <div class="base-timer">
     <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <g class="base-timer__circle">
         <circle class="base-timer__path-elapsed" cx="50" cy="50" r="45"></circle>
@@ -16,21 +16,25 @@
         ></path>
       </g>
     </svg>
+    <input v-model="message" placeholder="Enter Name">
+    <p>Name: {{ message }}</p>
+    
+    <span class="base-timer__label">{{ formattedTimeLeft }}</span>
+    <span class="">{{ formattedTimePassed }}</span> 
+    
+    <span class=""> Attempts:{{ numberOfAttempts }} </span>
+    <div></div>
     <button class=""
       @click="startTimer"
     >
     Start Timer
     </button>
-    <span class="base-timer__label">{{ formattedTimeLeft }}</span>
-    <span class="">{{ formattedTimePassed }}</span> 
-    <div></div>
-    <span class=""> Attempts:{{ numberOfAttempts }} </span>
-    <div></div>
     <button
       @click="resetTime"
     >
     RESET
     </button>
+    
   </div>
 </template>
 
@@ -64,7 +68,8 @@ export default {
       timePassed: 0,
       timerInterval: null,
       halfHourTimer: 0,
-      numberOfAttempts: 0
+      numberOfAttempts: 0,
+      message: ""
     };
   },
 
@@ -206,6 +211,9 @@ export default {
   &__svg {
     transform: scaleX(-1);
   }
+}
+p {
+  font-weight: bold;
 }
 </style>>
 
