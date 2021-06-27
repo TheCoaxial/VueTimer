@@ -1,3 +1,4 @@
+<!--Base Timer-->
 <template>
   <div class="base-timer">
     <svg
@@ -15,17 +16,40 @@
       </g>
     </svg>
     <span class="base-timer__label">
-      <!-- Remaining time label -->
+      {{ formattedTimeLeft }}
     </span>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
+  
+  computed: {
+    formattedTimeLeft() {
+      const timeLeft = this.timeLeft
+
+      //The largest round integer less than or equal to the result of time divided by 60
+      const minutes = Math.floor(timeLeft / 60)
+
+      // Seconds calculations
+      let seconds = timeLeft % 60
+
+      // If the value of seconds is less than 10 then display seconds left with a leading 0
+      if (seconds < 10) {
+        seconds = `0${seconds}`
+      }
+
+      // the output in MM:SS format
+      return `${minutes}:${seconds}`
+    }
+  },
+
   props: {
-    msg: String
-  }
+    timeLeft: {
+      type: Number,
+      required: true
+    }
+  }  
 }
 </script>
 
@@ -45,6 +69,20 @@ export default {
   &__path-elapsed {
     stroke-width: 7px;
     stroke:grey;
+  }
+
+  &__label {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+
+    top: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 48px;
   }
 }
 </style>>
