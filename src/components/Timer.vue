@@ -16,14 +16,29 @@
         ></path>
       </g>
     </svg>
+    <button class=""
+      @click="startTimer"
+    >
+    Start Timer
+    </button>
     <span class="base-timer__label">{{ formattedTimeLeft }}</span>
+    <span class="">{{ formattedTimePassed }}</span> 
+    <div></div>
+    <span class=""> Attempts:{{ numberOfAttempts }} </span>
+    <div></div>
+    <button
+      @click="resetTime"
+    >
+    RESET
+    </button>
   </div>
 </template>
 
 <script>
 const FULL_DASH_ARRAY = 283;
-const WARNING_THRESHOLD = 10;
-const ALERT_THRESHOLD = 5;
+const WARNING_THRESHOLD = 60;
+const ALERT_THRESHOLD = 15;
+
 
 const COLOR_CODES = {
   info: {
@@ -40,12 +55,16 @@ const COLOR_CODES = {
 };
 
 const TIME_LIMIT = 300;
+const HALF_HOUR = 1800;
+
 
 export default {
   data() {
     return {
       timePassed: 0,
-      timerInterval: null
+      timerInterval: null,
+      halfHourTimer: 0,
+      numberOfAttempts: 0
     };
   },
 
@@ -65,9 +84,24 @@ export default {
 
       return `${minutes}:${seconds}`;
     },
+    formattedTimePassed() {
+      const halfHourTimer = this.halfHourClock;
+      let minutes = Math.floor(halfHourTimer / 60);
+      let seconds = halfHourTimer % 60;
+
+      if (seconds < 10) {
+        seconds = `0${seconds}`;
+      }
+
+      return `${minutes}:${seconds}`;
+    },
 
     timeLeft() {
       return TIME_LIMIT - this.timePassed;
+    },
+
+    halfHourClock() {
+      return HALF_HOUR - this.halfHourTimer + 9;
     },
 
     timeFraction() {
@@ -96,17 +130,20 @@ export default {
     }
   },
 
-  mounted() {
-    this.startTimer();
-  },
-
   methods: {
     onTimesUp() {
       clearInterval(this.timerInterval);
+      clearInterval(this.halfHourClock);
     },
 
     startTimer() {
       this.timerInterval = setInterval(() => (this.timePassed += 1), 1000);
+      this.halfHourTimer = setInterval(() => (this.halfHourTimer += 1), 1000);
+    },
+
+    resetTime() {
+      this.numberOfAttempts +=1;
+      this.timePassed = 0;
     }
   }
 };
@@ -118,7 +155,7 @@ export default {
 .base-timer {
   position: relative;
   width: 300px;
-  height: 300px;
+  height: 150px;
 /* Removes SVG styling that would hide the time label */
   &__circle {
     fill: none;
