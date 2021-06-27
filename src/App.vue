@@ -3,18 +3,39 @@
   
 
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Timer
+    :time-left="timeLeft"
+    />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/Timer.vue'
+import Timer from './components/Timer.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Timer
+  },
+  data() {
+    return {
+      timeLimit: 20,
+      timePassed: 0,
+      timerInterval: null,
+    }
+  },
+  methods: {
+    startTimer() {
+      this.timerInterval = setInterval (() => (this.timePassed +=1), 1000)
+    }
+  },
+  computed: {
+    timeLeft() {
+      return this.timeLimit - this.timePassed
+    }
+  },
+  mounted() {
+    this.startTimer();
   }
 }
 </script>
