@@ -13,6 +13,14 @@
           cy="50"
           r="46.5"
         />
+        <path
+          class="base-timer__path-remaining"
+          d="
+            M 50, 50
+            m -45, 0
+            a 45,45 0 1,0 90,0
+            a 45,45 0 1,0 90,0
+          "></path>
       </g>
     </svg>
     <span class="base-timer__label">
