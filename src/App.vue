@@ -16,28 +16,8 @@ export default {
   name: 'App',
   components: {
     Timer
-  },
-  data() {
-    return {
-      timeLimit: 20,
-      timePassed: 0,
-      timerInterval: null,
-    }
-  },
-  methods: {
-    startTimer() {
-      this.timerInterval = setInterval (() => (this.timePassed +=1), 1000)
-    }
-  },
-  computed: {
-    timeLeft() {
-      return this.timeLimit - this.timePassed
-    }
-  },
-  mounted() {
-    this.startTimer();
   }
-}
+};
 </script>
 
 <style>
