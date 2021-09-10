@@ -80,6 +80,7 @@ const COLOR_CODES = {
  
 const TIME_LIMIT = 300;
 const HALF_HOUR = 1800;
+let timerOn = 0;
 
 
 export default {
@@ -163,8 +164,11 @@ export default {
     },
 
     startTimer() {
+      if(timerOn === 0) {
       this.timerInterval = setInterval(() => (this.timePassed += 1), 1000);
       this.halfHourTimerInterval = setInterval(() => (this.halfHourTimer += 1), 1000);
+      timerOn = 1;
+      }
     },
 
     resetTime() {
@@ -173,6 +177,7 @@ export default {
     },
 
     endTimer() {
+      if (confirm("Sure you want to end the timer?")){
       clearInterval(this.timerInterval);
       clearInterval(this.halfHourTimerInterval);
       this.timePassed = 0;
@@ -180,11 +185,14 @@ export default {
       this.numberOfAttempts = 0;
       audioFile.pause();
       audioFile.currentTime = 0;
+      timerOn = 0;
+      }
     },
 
     pauseTimer() {
       clearInterval(this.timerInterval);
       clearInterval(this.halfHourTimerInterval);
+      timerOn = 0;
     }
   }
 };
